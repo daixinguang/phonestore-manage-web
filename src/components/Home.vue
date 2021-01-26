@@ -11,19 +11,49 @@
     <el-container>
       <!--左侧导航栏Aside-->
       <el-aside width="200px">
-        <el-menu background-color="#3a5169" text-color="#fff" active-text-color="#03C2E6" unique-opened router>
-          <!-- 一级菜单-->
-          <el-submenu :index="item.id+''" v-for="item in menulist" :key="item.id">
+        <el-menu background-color="#3a5169" text-color="#fff" active-text-color="#03C2E6" unique-opened router :default-active="this.$route.path">
+          <el-submenu index="1">
             <template slot="title">
-              <i :class="iconClass[item.id]"></i>
-              <span>{{ item.authName }}</span>
+              <i class="el-icon-user-solid"></i>
+              <span>用户管理</span>
             </template>
-            <!--二级菜单-->
-            <el-menu-item :index="'/' + subItem.path" v-for="subItem in item.children" :key="subItem.id">
-              <template slot="title">
-                <i class="el-icon-menu"></i>
-                <span>{{ subItem.authName }}</span>
-              </template>
+            <el-menu-item index="/users">
+              <i class="el-icon-user"></i>
+              <span>用户列表</span>
+            </el-menu-item>
+          </el-submenu>
+          <el-submenu index="2">
+            <template slot="title">
+              <i class="el-icon-s-goods"></i>
+              <span>商品管理</span>
+            </template>
+            <el-menu-item index="/brands">
+              <i class="el-icon-menu"></i>
+              <span>品牌列表</span>
+            </el-menu-item>
+            <el-menu-item index="/goods">
+              <i class="el-icon-menu"></i>
+              <span>商品列表</span>
+            </el-menu-item>
+          </el-submenu>
+          <el-submenu index="3">
+            <template slot="title">
+              <i class="el-icon-s-order"></i>
+              <span>订单管理</span>
+            </template>
+            <el-menu-item index="/orders">
+              <i class="el-icon-menu"></i>
+              <span>订单列表</span>
+            </el-menu-item>
+          </el-submenu>
+          <el-submenu index="4">
+            <template slot="title">
+              <i class="el-icon-s-marketing"></i>
+              <span>数据统计</span>
+            </template>
+            <el-menu-item index="/reports">
+              <i class="el-icon-data-analysis"></i>
+              <span>数据报表</span>
             </el-menu-item>
           </el-submenu>
         </el-menu>
@@ -43,29 +73,15 @@ export default {
   data () {
     return {
       // 左侧菜单数据
-      menulist: [],
-      iconClass: {
-        125: 'el-icon-user-solid',
-        103: 'el-icon-suitcase',
-        101: 'el-icon-shopping-bag-1',
-        102: 'el-icon-shopping-cart-2',
-        145: 'el-icon-s-data'
-      }
+      menulist: []
     }
   },
   created () {
-    this.getMenuList()
   },
   methods: {
     logout () {
       window.sessionStorage.clear()// 清空session
       this.$router.push('/login')// 重定向
-    },
-    async getMenuList () {
-      const { data: res } = await this.$http.get('menus')
-      if (res.meta.status !== 200) return this.$message.error(res.meta.msg)
-      this.menulist = res.data
-      console.log(res)
     }
   }
 }

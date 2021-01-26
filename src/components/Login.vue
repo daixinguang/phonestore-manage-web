@@ -72,13 +72,13 @@ export default {
     login () {
       this.$refs.loginFormRef.validate(async valid => {
         if (!valid) return false
-        const { data: res } = await this.$http.post('login', this.loginForm)// 返回的promise可以通过async和await简化返回结果
-        if (res.meta.status !== 200) return this.$message.error('登录失败！')
-        this.$message.success('登陆成功')
-        // 1.保存session
-        window.sessionStorage.setItem('token', res.data.token)
-        // 2.跳转到/home
-        await this.$router.push('/home')
+        try {
+          const { data: res } = await this.$http.post('user/login', this.$qs.stringify(this.loginForm))// 返回的promise可以通过async和await简化返回结果
+          this.$message.success('登陆成功,欢迎您:' + res.username)
+          await this.$router.push('/home')
+        } catch (e) {
+          return this.$message.error('登录失败！')
+        }
       })
     }
   }
