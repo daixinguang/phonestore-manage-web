@@ -18,7 +18,7 @@ import {
   Row,
   Col,
   Table,
-  TableColumn, Pagination, Dialog, MessageBox
+  TableColumn, Pagination, Dialog, MessageBox, Image, Upload
 } from 'element-ui'
 
 Vue.use(Button)
@@ -41,6 +41,8 @@ Vue.use(Table)
 Vue.use(TableColumn)
 Vue.use(Pagination)
 Vue.use(Dialog)
+Vue.use(Image)
+Vue.use(Upload)
 
 Vue.prototype.$message = Message
 Vue.prototype.$messageBox = MessageBox

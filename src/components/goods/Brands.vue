@@ -25,6 +25,9 @@
         <el-table-column prop="name" label="品牌">
         </el-table-column>
         <el-table-column prop="image" label="商标logo">
+          <template slot-scope="scope">
+            <el-image :src="scope.row.image"></el-image>
+          </template>
         </el-table-column>
         <el-table-column label="操作" width="150">
           <template slot-scope="scope">
@@ -50,12 +53,20 @@
     <!--添加品牌对话框-->
     <el-dialog title="添加品牌" :visible.sync="addBrandDialogVisible" width="50%" :before-close="handleClose">
       <el-form :model="addBrandForm" status-icon ref="addBrandFormRef" label-width="100px">
-        <el-form-item label="品牌" prop="brand">
-          <el-input type="text" v-model="addBrandForm.name" autocomplete="off"></el-input>
+        <el-form-item label="品牌" prop="name">
+          <el-input type="text" v-model="addBrandForm.name" autocomplete="off" style="width: 360px;"></el-input>
         </el-form-item>
-        <!--TODO：上传图片-->
-        <el-form-item label="商标logo" prop="password">
-          <el-input v-model="addBrandForm.image" autocomplete="off"></el-input>
+        <el-form-item label="商标" prop="image">
+          <!--          <el-input v-model="addBrandForm.image" autocomplete="off"></el-input>-->
+          <el-upload
+            drag
+            action="upload/image"
+            :on-success="uploadSuccess"
+          >
+            <i class="el-icon-upload"></i>
+            <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+            <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过5MB</div>
+          </el-upload>
         </el-form-item>
       </el-form>
       <span slot="footer">
@@ -64,15 +75,25 @@
   </span>
     </el-dialog>
     <!--修改品牌对话框-->
-    <!-- 修改用户的对话框 -->
-    <el-dialog title="修改用户信息" :visible.sync="editDialogVisible" width="50%" @close="editDialogClosed">
+    <el-dialog title="修改品牌信息" :visible.sync="editDialogVisible" width="50%" @close="editDialogClosed">
       <!-- 内容主体 -->
       <el-form :model="editBrandForm" ref="editbrandFormRef" label-width="70px">
-        <el-form-item label="品牌">
+        <el-form-item label="品牌" prop="name">
           <el-input v-model="editBrandForm.name"></el-input>
         </el-form-item>
-        <el-form-item label="商标" prop="email">
-          <el-input v-model="editBrandForm.image"></el-input>
+        <el-form-item label="商标" prop="image">
+          <!--          <el-input v-model="editBrandForm.image"></el-input>-->
+          <el-image :src="editBrandForm.image"></el-image>
+          <el-upload
+            drag
+            show-file-list="false"
+            action="upload/image"
+            :on-success="editImageSuccess"
+          >
+            <i class="el-icon-upload"></i>
+            <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+            <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过5MB</div>
+          </el-upload>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -104,7 +125,7 @@ export default {
       addBrandDialogVisible: false,
       addBrandForm: {
         name: '联想（Lenovo）',
-        image: 'Lenovo'
+        image: ''
       },
       editDialogVisible: false,
       editBrandForm: {
@@ -117,6 +138,15 @@ export default {
     this.getBrandList()
   },
   methods: {
+    editImageSuccess (res) {
+      this.$message.success('上传图片成功')
+      this.editBrandForm.image = res
+    },
+    // 获取上传照片地址
+    uploadSuccess (res) {
+      this.$message.success('上传图片成功')
+      this.addBrandForm.image = res
+    },
     // 删除用户信息
     async removeBrandById (id) {
       const confirmResult = await this.$messageBox.confirm(
@@ -220,6 +250,5 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style scoped lang="less">
 </style>
